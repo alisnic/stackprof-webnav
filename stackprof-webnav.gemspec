@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["andrei.lisnic@gmail.com"]
   spec.summary       = %q{View stackprof dumps in a web UI}
   spec.description   = %q{Provides the ability to analyze StackProf dumps}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/alisnic/stackprof-webnav"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -21,10 +21,10 @@ Gem::Specification.new do |spec|
   spec.bindir = 'bin'
   spec.executables << 'stackprof-webnav'
 
-  spec.add_dependency "nyny", ">= 3.0.1"
-  spec.add_dependency "haml"
-  spec.add_dependency "stackprof"
-  spec.add_dependency "sprockets"
+  spec.add_dependency "nyny", "~> 3.0"
+  spec.add_dependency "haml", "~> 4.0"
+  spec.add_dependency "stackprof", "~> 0.2"
+  spec.add_dependency "sprockets", "~> 2.10"
   spec.add_development_dependency "bundler", "~> 1.5"
-  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rake", "~> 10.1"
 end

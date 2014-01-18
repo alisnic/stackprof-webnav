@@ -41,7 +41,7 @@ module StackProf
 
       sprockets = Sprockets::Environment.new do |env|
         env.append_path(File.join(__dir__, 'css'))
-      end
+      end.index
       builder.map('/assets'){ run sprockets }
 
       get '/' do
