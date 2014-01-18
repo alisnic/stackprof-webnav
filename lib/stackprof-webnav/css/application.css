@@ -1,0 +1,9 @@
+/*
+= require normalize
+= require foundation.min
+= require code
+*/
+
+table {
+  width: 100%;
+}

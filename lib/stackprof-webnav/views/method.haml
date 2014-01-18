@@ -1,0 +1,42 @@
+%a{:href => '/'} &#8592; Back to overview
+%br
+
+- @frames.each do |frame|
+  %h3= frame[:location]
+  - if frame[:callers].any?
+    %table
+      %thead
+        %th Callers
+        %th
+        %th
+        %th
+      %tbody
+        - frame[:callers].each do |caller|
+          %tr
+            %td
+            %td= caller[:weight]
+            %td= caller[:pct]
+            %td
+              %a{:href => method_url(caller[:method])}
+                = caller[:method]
+
+  - if frame[:callees].any?
+    %table
+      %thead
+        %th Callees
+        %th
+        %th
+        %th
+      %tbody
+        - frame[:callees].each do |caller|
+          %tr
+            %td
+            %td= caller[:weight]
+            %td= caller[:pct]
+            %td
+              %a{:href => method_url(caller[:method])}
+                = caller[:method]
+
+  %h4 Code
+  != frame[:source]
+  %hr

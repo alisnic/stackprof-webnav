@@ -1,0 +1,18 @@
+%table.centered
+  %thead
+    %th Total
+    %th %
+    %th Samples
+    %th %
+    %th Method
+
+  %tbody
+    - @frames.each do |frame|
+      %tr
+        %td= frame[:total]
+        %td= frame[:total_pct]
+        %td= frame[:samples]
+        %td= frame[:samples_pct]
+        %td
+          %a{:href => method_url(frame[:method])}
+            = frame[:method]
