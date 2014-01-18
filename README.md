@@ -1,5 +1,6 @@
 # StackProf Web navigator
 
+__WARNING__: early version, no test, may have bugs.
 Provides a web ui to inspect stackprof dumps.
 
 ![main screenshot][main-screenshot]
