@@ -2,9 +2,11 @@
 
 Provides a web ui to inspect stackprof dumps.
 
-![main screeshot][main-screenshot]
+![main screenshot][main-screenshot]
 
-![method screeshot][method-screenshot]
+![method screenshot][method-screenshot]
+
+![file screenshot][file-screenshot]
 
 ## Usage
 
