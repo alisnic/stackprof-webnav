@@ -17,9 +17,13 @@ module StackProf
       end
 
       helpers do
+        def template_path name
+          File.join(__dir__, name)
+        end
+
         def render_with_layout *args
-          args[0] = "views/#{args[0]}.haml"
-          render('views/layout.haml') { render(*args) }
+          args[0] = template_path("views/#{args[0]}.haml")
+          render(template_path('views/layout.haml')) { render(*args) }
         end
 
         def presenter
@@ -32,7 +36,7 @@ module StackProf
       end
 
       sprockets = Sprockets::Environment.new do |env|
-        env.append_path('css')
+        env.append_path(File.join(__dir__, 'css'))
       end
       builder.map('/assets'){ run sprockets }
 
