@@ -1,1 +1,1 @@
-##
+require 'stackprof-webnav/server'

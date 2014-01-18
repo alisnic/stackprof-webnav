@@ -1,3 +1,22 @@
 #!/usr/bin/env ruby
 require 'optparse'
 require 'stackprof-webnav'
+
+options = {
+  :port => 9292
+}
+
+parser = OptionParser.new(ARGV) do |o|
+  o.banner = "Usage: stackprof-webnav file.dump [-p NUMBER]"
+
+  o.on('-p', 'Server port') {|port| options[:port] = port }
+end
+
+parser.parse!
+parser.abort(parser.help) if ARGV.empty?
+
+file = ARGV.pop
+
+server = StackProf::Webnav::Server
+server.report_dump_path = file
+server.run! options[:port]
