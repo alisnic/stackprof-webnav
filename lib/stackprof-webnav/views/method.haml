@@ -1,8 +1,12 @@
+%h3 StackProf Navigator - #{@action} (#{@frames.count} frames)
+%hr
+
 %a{:href => '/'} &#8592; Back to overview
 %br
 
 - @frames.each do |frame|
-  %h3= frame[:location]
+  %h4
+    %a{:href => file_url(frame[:location])}= frame[:location]
   - if frame[:callers].any?
     %table
       %thead

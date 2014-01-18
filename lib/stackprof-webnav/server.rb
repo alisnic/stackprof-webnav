@@ -33,6 +33,10 @@ module StackProf
         def method_url name
           "/method?name=#{URI.escape(name)}"
         end
+
+        def file_url path
+          "/file?path=#{URI.escape(path)}"
+        end
       end
 
       sprockets = Sprockets::Environment.new do |env|
@@ -51,6 +55,13 @@ module StackProf
         @action = params[:name]
         @frames = presenter.method_info(params[:name])
         render_with_layout :method
+      end
+
+      get '/file' do
+        path = params[:path]
+        @path = path
+        @content = presenter.file_overview(path)
+        render_with_layout :file
       end
     end
   end

@@ -8,6 +8,10 @@ module StackProf
         @report = report
       end
 
+      def file_overview path
+        BetterErrors::CodeFormatter::HTML.new(path, 0, 9999).output
+      end
+
       def overview_frames
         report.frames.map do |frame, info|
           call, total = info.values_at(:samples, :total_samples)
@@ -31,7 +35,7 @@ module StackProf
           {
             :callers => callers(frame, info),
             :callees => callees(frame, info),
-            :location => "#{file}:#{line}",
+            :location => file,
             :source => BetterErrors::CodeFormatter::HTML.new(file, line).output
           }
         end
