@@ -1,4 +1,5 @@
 require 'better_errors'
+require 'stringio'
 
 module StackProf
   module Webnav
@@ -9,7 +10,14 @@ module StackProf
       end
 
       def file_overview path
-        BetterErrors::CodeFormatter::HTML.new(path, 0, 9999).output
+        buffer = StringIO.new
+        report.print_file(path, buffer)
+        data = buffer.string.split("\n").map {|l| l.split('|').first}
+
+        {
+          :lineinfo => data,
+          :code => BetterErrors::CodeFormatter::HTML.new(path, 0, 9999).output
+        }
       end
 
       def overview_frames

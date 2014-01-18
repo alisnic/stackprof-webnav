@@ -1,3 +1,11 @@
 %h3 StackProf Navigator - #{@path}
 %hr
-!= @content
+
+%a{:href => '/'} &#8592; Back to overview
+%br
+%br
+
+.code_linenums
+  - @data[:lineinfo].each do |l|
+    %span= l
+!= @data[:code]

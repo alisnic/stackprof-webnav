@@ -41,7 +41,7 @@ module StackProf
 
       sprockets = Sprockets::Environment.new do |env|
         env.append_path(File.join(__dir__, 'css'))
-      end.index
+      end
       builder.map('/assets'){ run sprockets }
 
       get '/' do
@@ -60,7 +60,7 @@ module StackProf
       get '/file' do
         path = params[:path]
         @path = path
-        @content = presenter.file_overview(path)
+        @data = presenter.file_overview(path)
         render_with_layout :file
       end
     end
