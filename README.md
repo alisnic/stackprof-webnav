@@ -38,3 +38,4 @@ Open the browser at localhost:9292
 [create-dump]: https://github.com/tmm1/stackprof#getting-started
 [main-screenshot]: https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/main.png?raw=true
 [method-screenshot]: https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/method.png?raw=true
+[file-screenshot]: https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/file.png?raw=true
