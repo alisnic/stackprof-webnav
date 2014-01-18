@@ -4,6 +4,8 @@ __WARNING__: early version, no test, may have bugs.
 
 Provides a web ui to inspect stackprof dumps.
 
+## Screenshots
+
 ![main screenshot][main-screenshot]
 
 ![method screenshot][method-screenshot]
