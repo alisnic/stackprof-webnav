@@ -9,7 +9,7 @@ options = {
 parser = OptionParser.new(ARGV) do |o|
   o.banner = "Usage: stackprof-webnav file.dump [-p NUMBER]"
 
-  o.on('-p', 'Server port') {|port| options[:port] = port }
+  o.on('-p [PORT]', 'Server port') {|port| options[:port] = port }
 end
 
 parser.parse!
