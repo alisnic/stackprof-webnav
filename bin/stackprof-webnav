@@ -8,7 +8,6 @@ options = {
 
 parser = OptionParser.new(ARGV) do |o|
   o.banner = "Usage: stackprof-webnav file.dump [-p NUMBER]"
-
   o.on('-p [PORT]', 'Server port') {|port| options[:port] = port }
 end
 
@@ -18,5 +17,5 @@ parser.abort(parser.help) if ARGV.empty?
 file = ARGV.pop
 
 server = StackProf::Webnav::Server
-server.report_dump_path = file
+server.report_dump_path = File.expand_path(file)
 server.run! options[:port]
