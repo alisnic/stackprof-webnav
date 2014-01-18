@@ -1,24 +1,27 @@
-# Stackprof::Webnav
+# StackProf Web navigator
 
-TODO: Write a gem description
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'stackprof-webnav'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install stackprof-webnav
+Provides a web ui to inspect stackprof dumps.
 
 ## Usage
 
-TODO: Write usage instructions here
+### Install the gem
+```bash
+$ gem install stackprof-webnav
+```
+
+### Pass a dump to it
+```bash
+$ stackprof-webnav /path/to/stackprof.dump
+```
+
+See [stackprof gem][create-dump] homepage to learn how to create dumps.
+
+### Profit
+Open the browser at localhost:9292
+
+## Caveats
+- no tests, this gem was created for my personal usage in a hack stream,
+  bugs may occur
 
 ## Contributing
 
@@ -27,3 +30,5 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+[create-dump]: https://github.com/tmm1/stackprof#getting-started
