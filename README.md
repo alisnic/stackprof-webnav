@@ -2,6 +2,10 @@
 
 Provides a web ui to inspect stackprof dumps.
 
+![main screeshot][main-screenshot]
+
+![method screeshot][method-screenshot]
+
 ## Usage
 
 ### Install the gem
@@ -32,3 +36,5 @@ Open the browser at localhost:9292
 5. Create new Pull Request
 
 [create-dump]: https://github.com/tmm1/stackprof#getting-started
+[main-screenshot]: https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/main.png?raw=true
+[method-screenshot]: https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/method.png?raw=true
