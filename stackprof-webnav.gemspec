@@ -21,11 +21,10 @@ Gem::Specification.new do |spec|
   spec.bindir = 'bin'
   spec.executables << 'stackprof-webnav'
 
-  spec.add_dependency "better_errors", "~> 1.1.0"
-  spec.add_dependency "nyny", "~> 3.0"
+  spec.add_dependency "nyny", "~> 3.4"
   spec.add_dependency "haml", "~> 4.0"
   spec.add_dependency "stackprof", "~> 0.2"
-  spec.add_dependency "sprockets", "~> 2.10"
+  spec.add_dependency "sprockets-nyny", "0.0.3"
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake", "~> 10.1"
 end
