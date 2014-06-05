@@ -1,20 +1,27 @@
 require 'nyny'
 require 'haml'
 require "stackprof"
-require 'sprockets'
+require 'sprockets/nyny'
 require 'net/http'
 require_relative 'presenter'
 
 module StackProf
   module Webnav
     class Server < NYNY::App
+      register Sprockets::NYNY
+      config.assets.paths << File.join(__dir__, 'css'))
+
       class << self
         attr_accessor :report_dump_path, :report_dump_url
 
         def presenter
           return @presenter unless @presenter.nil?
-          report_contents = report_dump_path.nil? ? Net::HTTP.get(URI.parse(report_dump_url)) : File.open(report_dump_path).read
-          report = StackProf::Report.new(Marshal.load(report_contents))
+          content = if report_dump_path.nil?
+                      Net::HTTP.get(URI.parse(report_dump_url))
+                    else
+                      File.open(report_dump_path).read
+
+          report = StackProf::Report.new(Marshal.load(content))
           @presenter ||= Presenter.new(report)
         end
       end
@@ -41,11 +48,6 @@ module StackProf
           "/file?path=#{URI.escape(path)}"
         end
       end
-
-      sprockets = Sprockets::Environment.new do |env|
-        env.append_path(File.join(__dir__, 'css'))
-      end.index
-      builder.map('/assets'){ run sprockets }
 
       get '/' do
         @file = Server.report_dump_path || Server.report_dump_url
