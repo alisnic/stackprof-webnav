@@ -9,7 +9,7 @@ module StackProf
   module Webnav
     class Server < NYNY::App
       register Sprockets::NYNY
-      config.assets.paths << File.join(__dir__, 'css'))
+      config.assets.paths << File.join(__dir__, 'css')
 
       class << self
         attr_accessor :report_dump_path, :report_dump_url
@@ -20,6 +20,7 @@ module StackProf
                       Net::HTTP.get(URI.parse(report_dump_url))
                     else
                       File.open(report_dump_path).read
+                    end
 
           report = StackProf::Report.new(Marshal.load(content))
           @presenter ||= Presenter.new(report)
