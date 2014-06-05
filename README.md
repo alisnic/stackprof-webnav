@@ -22,7 +22,9 @@ $ gem install stackprof-webnav
 ### Pass a dump to it
 ```bash
 $ stackprof-webnav /path/to/stackprof.dump
+$ stackprof-webnav http://path/to/stackprof.dump
 ```
+If the argument passed does not exist locally, it is assumed to be a URI and is treated as such.
 
 See [stackprof gem][create-dump] homepage to learn how to create dumps.
 

@@ -2,16 +2,19 @@ require 'nyny'
 require 'haml'
 require "stackprof"
 require 'sprockets'
+require 'net/http'
 require_relative 'presenter'
 
 module StackProf
   module Webnav
     class Server < NYNY::App
       class << self
-        attr_accessor :report_dump_path
+        attr_accessor :report_dump_path, :report_dump_url
 
         def presenter
-          report = StackProf::Report.new(Marshal.load(File.open(report_dump_path).read))
+          return @presenter unless @presenter.nil?
+          report_contents = report_dump_path.nil? ? Net::HTTP.get(URI.parse(report_dump_url)) : File.open(report_dump_path).read
+          report = StackProf::Report.new(Marshal.load(report_contents))
           @presenter ||= Presenter.new(report)
         end
       end
@@ -45,7 +48,7 @@ module StackProf
       builder.map('/assets'){ run sprockets }
 
       get '/' do
-        @file = Server.report_dump_path
+        @file = Server.report_dump_path || Server.report_dump_url
         @action = "overview"
         @frames = presenter.overview_frames
         render_with_layout :overview
