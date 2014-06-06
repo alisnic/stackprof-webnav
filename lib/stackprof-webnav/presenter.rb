@@ -35,6 +35,7 @@ module StackProf
       end
 
       def listing_dumps
+        Server.report_dump_listing += "/" unless Server.report_dump_listing.end_with?("/") 
         xml_data = Net::HTTP.get(URI.parse(Server.report_dump_listing))
         if xml_data
           doc = REXML::Document.new(xml_data)
