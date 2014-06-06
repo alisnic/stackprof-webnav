@@ -1,6 +1,8 @@
 require 'better_errors'
 require 'stringio'
 require 'rexml/document'
+require 'action_view'
+include ActionView::Helpers::NumberHelper
 
 module StackProf
   module Webnav
@@ -43,7 +45,8 @@ module StackProf
           doc.elements.each('ListBucketResult/Contents') do |ele|
             dumps << {
               :key => ele.elements["Key"].text, 
-              :date => ele.elements["LastModified"].text, 
+              :date => ele.elements["LastModified"].text,
+              :size => number_with_delimiter(ele.elements["Size"].text.to_i),
               :uri => Server.report_dump_listing + ele.elements["Key"].text
             }
           end
