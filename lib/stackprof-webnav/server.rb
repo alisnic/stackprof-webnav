@@ -10,7 +10,10 @@ module StackProf
     class Server < NYNY::App
       register Sprockets::NYNY
       config.assets.paths << File.join(__dir__, 'css')
-
+      config.cache_classes = true
+      config.serve_static_assets = true
+      config.assets.compile = true
+      config.assets.digest = true
       class << self
         attr_accessor :cmd_options, :report_dump_path, :report_dump_uri, :report_dump_listing 
 
