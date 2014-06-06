@@ -12,19 +12,33 @@ module StackProf
       config.assets.paths << File.join(__dir__, 'css')
 
       class << self
-        attr_accessor :report_dump_path, :report_dump_url
+        attr_accessor :cmd_options, :report_dump_path, :report_dump_uri, :report_dump_listing 
 
-        def presenter
-          return @presenter unless @presenter.nil?
-          content = if report_dump_path.nil?
-                      Net::HTTP.get(URI.parse(report_dump_url))
-                    else
-                      File.open(report_dump_path).read
-                    end
-
-          report = StackProf::Report.new(Marshal.load(content))
-          @presenter ||= Presenter.new(report)
+        def presenter regenerate=false
+          return @presenter unless regenerate || @presenter.nil?
+          process_options
+          if self.report_dump_path || self.report_dump_uri
+            report_contents = if report_dump_path.nil?
+                                Net::HTTP.get(URI.parse(report_dump_uri)) 
+                              else 
+                                File.open(report_dump_path).read
+                              end
+            report = StackProf::Report.new(Marshal.load(report_contents))
+          end
+          @presenter = Presenter.new(report)
         end
+
+        private
+        def process_options
+          if cmd_options[:filepath]                               
+            self.report_dump_path = cmd_options[:filepath]      
+          elsif cmd_options[:uri]                                 
+            self.report_dump_uri = cmd_options[:uri]            
+          elsif cmd_options[:bucket]
+            self.report_dump_listing = cmd_options[:bucket]
+          end                           
+        end
+                      
       end
 
       helpers do
@@ -48,14 +62,38 @@ module StackProf
         def file_url path
           "/file?path=#{URI.escape(path)}"
         end
+        
+        def overview_url path
+          "/overview?path=#{URI.escape(path)}"
+        end
       end
 
       get '/' do
-        @file = Server.report_dump_path || Server.report_dump_url
+        presenter
+        if Server.report_dump_listing
+          redirect_to '/listing' 
+        else
+          redirect_to '/overview'
+        end
+      end
+
+      get '/overview' do
+        if params[:path]
+          Server.report_dump_uri = params[:path]
+          Server.presenter(true)
+        end
+        @file = Server.report_dump_path || Server.report_dump_uri
         @action = "overview"
         @frames = presenter.overview_frames
         render_with_layout :overview
       end
+
+      get '/listing' do
+        @file = Server.report_dump_listing
+        @action = "listing"
+        @dumps = presenter.listing_dumps 
+        render_with_layout :listing
+      end 
 
       get '/method' do
         @action = params[:name]

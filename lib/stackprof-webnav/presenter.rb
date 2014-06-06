@@ -1,5 +1,6 @@
 require 'better_errors'
 require 'stringio'
+require 'rexml/document'
 
 module StackProf
   module Webnav
@@ -31,6 +32,23 @@ module StackProf
             :method => info[:name]
           }
         end
+      end
+
+      def listing_dumps
+        xml_data = Net::HTTP.get(URI.parse(Server.report_dump_listing))
+        if xml_data
+          doc = REXML::Document.new(xml_data)
+          dumps = []
+          doc.elements.each('ListBucketResult/Contents') do |ele|
+            dumps << {
+              :key => ele.elements["Key"].text, 
+              :date => ele.elements["LastModified"].text, 
+              :uri => Server.report_dump_listing + ele.elements["Key"].text
+            }
+          end
+        end
+        dumps.sort_by! { |hash| hash[:date] }
+        dumps.reverse!
       end
 
       def method_info name
