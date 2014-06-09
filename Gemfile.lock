@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    stackprof-webnav (0.0.2)
+    stackprof-webnav (0.0.3)
       haml (~> 4.0)
       nyny (~> 3.4)
       sprockets-nyny (= 0.0.3)
