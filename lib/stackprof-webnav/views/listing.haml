@@ -9,13 +9,15 @@
   %thead                            
     %th Key                     
     %th Date                           
-    %th Dump                     
+    %th Size
+    %th Dump
                                    
-  %tbody                            
+  %tbody
     - @dumps.each do |dump|                       
       %tr                                           
         %td= dump[:key]                          
         %td= dump[:date]                      
+        %td= dump[:size]
         %td                                         
           %a{:href => overview_url(dump[:uri])}   
             = dump[:uri]                        
