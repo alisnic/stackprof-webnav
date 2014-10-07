@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 require 'optparse'
 require 'stackprof-webnav'
+require 'sprockets'
+require 'rack'
 
 options = {
   :port => 9292
@@ -15,9 +17,23 @@ parser = OptionParser.new(ARGV) do |o|
 end
 
 parser.parse!
-parser.abort(parser.help) unless [:filepath, :uri, :bucket].any? {|key| options.key?(key)} 
+parser.abort(parser.help) unless [:filepath, :uri, :bucket].any? {|key| options.key?(key)}
 
 server = StackProf::Webnav::Server
 server.cmd_options = options
 
-server.run! options[:port]
+builder = Rack::Builder.new do
+  map '/' do
+    run server.new
+  end
+
+  map '/assets' do
+    environment = Sprockets::Environment.new
+    environment.append_path File.expand_path("../../lib/stackprof-webnav/css", __FILE__)
+    run environment
+  end
+end
+
+puts File.expand_path("../lib/stackprof-webnav/css", __FILE__)
+
+Rack::Handler.get('webrick').run builder, :Port => options[:port]

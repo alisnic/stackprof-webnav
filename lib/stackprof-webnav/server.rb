@@ -1,26 +1,22 @@
 require 'nyny'
 require 'haml'
 require "stackprof"
-require 'sprockets/nyny'
 require 'net/http'
 require_relative 'presenter'
 
 module StackProf
   module Webnav
     class Server < NYNY::App
-      register Sprockets::NYNY
-      config.assets.paths << File.join(__dir__, 'css')
-
       class << self
-        attr_accessor :cmd_options, :report_dump_path, :report_dump_uri, :report_dump_listing 
+        attr_accessor :cmd_options, :report_dump_path, :report_dump_uri, :report_dump_listing
 
         def presenter regenerate=false
           return @presenter unless regenerate || @presenter.nil?
           process_options
           if self.report_dump_path || self.report_dump_uri
             report_contents = if report_dump_path.nil?
-                                Net::HTTP.get(URI.parse(report_dump_uri)) 
-                              else 
+                                Net::HTTP.get(URI.parse(report_dump_uri))
+                              else
                                 File.open(report_dump_path).read
                               end
             report = StackProf::Report.new(Marshal.load(report_contents))
@@ -30,15 +26,15 @@ module StackProf
 
         private
         def process_options
-          if cmd_options[:filepath]                               
-            self.report_dump_path = cmd_options[:filepath]      
-          elsif cmd_options[:uri]                                 
-            self.report_dump_uri = cmd_options[:uri]            
+          if cmd_options[:filepath]
+            self.report_dump_path = cmd_options[:filepath]
+          elsif cmd_options[:uri]
+            self.report_dump_uri = cmd_options[:uri]
           elsif cmd_options[:bucket]
             self.report_dump_listing = cmd_options[:bucket]
-          end                           
+          end
         end
-                      
+
       end
 
       helpers do
@@ -62,7 +58,7 @@ module StackProf
         def file_url path
           "/file?path=#{URI.escape(path)}"
         end
-        
+
         def overview_url path
           "/overview?path=#{URI.escape(path)}"
         end
@@ -71,7 +67,7 @@ module StackProf
       get '/' do
         presenter
         if Server.report_dump_listing
-          redirect_to '/listing' 
+          redirect_to '/listing'
         else
           redirect_to '/overview'
         end
@@ -91,9 +87,9 @@ module StackProf
       get '/listing' do
         @file = Server.report_dump_listing
         @action = "listing"
-        @dumps = presenter.listing_dumps 
+        @dumps = presenter.listing_dumps
         render_with_layout :listing
-      end 
+      end
 
       get '/method' do
         @action = params[:name]
