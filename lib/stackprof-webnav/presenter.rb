@@ -74,7 +74,7 @@ module StackProf
       private
 
       def percent value
-        "%2.2f%" % (value*100)
+        "%2.2f%%" % (value*100)
       end
 
       def callers frame, info
