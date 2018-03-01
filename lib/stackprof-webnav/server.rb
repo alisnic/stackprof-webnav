@@ -1,4 +1,4 @@
-require 'nyny'
+require 'sinatra'
 require 'haml'
 require "stackprof"
 require 'net/http'
@@ -6,7 +6,7 @@ require_relative 'presenter'
 
 module StackProf
   module Webnav
-    class Server < NYNY::App
+    class Server < Sinatra::Application
       class << self
         attr_accessor :cmd_options, :report_dump_path, :report_dump_uri, :report_dump_listing
 
@@ -38,15 +38,6 @@ module StackProf
       end
 
       helpers do
-        def template_path name
-          File.join(__dir__, name)
-        end
-
-        def render_with_layout *args
-          args[0] = template_path("views/#{args[0]}.haml")
-          render(template_path('views/layout.haml')) { render(*args) }
-        end
-
         def presenter
           Server.presenter
         end
@@ -67,9 +58,9 @@ module StackProf
       get '/' do
         presenter
         if Server.report_dump_listing
-          redirect_to '/listing'
+          redirect '/listing'
         else
-          redirect_to '/overview'
+          redirect '/overview'
         end
       end
 
@@ -81,27 +72,27 @@ module StackProf
         @file = Server.report_dump_path || Server.report_dump_uri
         @action = "overview"
         @frames = presenter.overview_frames
-        render_with_layout :overview
+        haml :overview
       end
 
       get '/listing' do
         @file = Server.report_dump_listing
         @action = "listing"
         @dumps = presenter.listing_dumps
-        render_with_layout :listing
+        haml :listing
       end
 
       get '/method' do
         @action = params[:name]
         @frames = presenter.method_info(params[:name])
-        render_with_layout :method
+        haml :method
       end
 
       get '/file' do
         path = params[:path]
         @path = path
         @data = presenter.file_overview(path)
-        render_with_layout :file
+        haml :file
       end
     end
   end
