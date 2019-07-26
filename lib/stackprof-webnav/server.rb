@@ -47,7 +47,13 @@ module StackProf
       get '/' do
         @directory = File.expand_path(Server.cmd_options[:directory] || '.')
         @files = Dir.entries(@directory).sort.map do |file|
-          OpenStruct.new(name: file, path: File.expand_path(file, @directory))
+          path = File.expand_path(file, @directory)
+
+          OpenStruct.new(
+            name: file,
+            path: path,
+            modified: File.mtime(path)
+          )
         end.select do |file|
           File.file?(file.path)
         end

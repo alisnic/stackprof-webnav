@@ -8,9 +8,11 @@
 %table.centered
   %thead
     %th Filename
+    %th Modified
 
   %tbody
     - @files.each do |file|
       %tr
         %td
           %a{href: url_for("/overview", dump: file.path)}= file.name
+        %td= file.modified
