@@ -34,25 +34,6 @@ module StackProf
         end
       end
 
-      def listing_dumps
-        Server.report_dump_listing += "/" unless Server.report_dump_listing.end_with?("/")
-        xml_data = Net::HTTP.get(URI.parse(Server.report_dump_listing))
-        if xml_data
-          doc = REXML::Document.new(xml_data)
-          dumps = []
-          doc.elements.each('ListBucketResult/Contents') do |ele|
-            dumps << {
-              :key => ele.elements["Key"].text,
-              :date => ele.elements["LastModified"].text,
-              :size => number_with_delimiter(ele.elements["Size"].text.to_i),
-              :uri => Server.report_dump_listing + ele.elements["Key"].text
-            }
-          end
-        end
-        dumps.sort_by! { |hash| hash[:date] }
-        dumps.reverse!
-      end
-
       def method_info name
         name = /#{Regexp.escape name}/ unless Regexp === name
         frames = report.frames.select do |frame, info|

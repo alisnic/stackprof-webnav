@@ -1,27 +1,11 @@
 require 'sinatra'
 require 'haml'
 require "stackprof"
-require 'net/http'
 require_relative 'presenter'
+require_relative 'dump'
 require 'pry'
 require "sinatra/reloader" if development?
 require 'ruby-graphviz'
-
-class Dump
-  attr_reader :path
-  attr_accessor :flamegraph_json, :graph_data
-  def initialize(path)
-    @path = path
-  end
-
-  def checksum
-    @checksum ||= Digest::SHA1.file(@path)
-  end
-
-  def content
-    @content ||= File.open(@path).read
-  end
-end
 
 module StackProf
   module Webnav
@@ -49,11 +33,9 @@ module StackProf
           Thread.current[:presenter] ||= Presenter.new(current_report)
         end
 
-        def string_io(&block)
-          io = StringIO.new
-          yield io
-          io.close
-          io.string
+        def ensure_file_generated(path, &block)
+          return if File.exist?(path)
+          File.open(path, 'wb', &block)
         end
 
         def url_for(path, options={})
@@ -64,7 +46,7 @@ module StackProf
 
       get '/' do
         @directory = File.expand_path(Server.cmd_options[:directory] || '.')
-        @files = Dir.entries(@directory).map do |file|
+        @files = Dir.entries(@directory).sort.map do |file|
           OpenStruct.new(name: file, path: File.expand_path(file, @directory))
         end.select do |file|
           File.file?(file.path)
@@ -80,27 +62,25 @@ module StackProf
       end
 
       get '/flames.json' do
-        current_dump.flamegraph_json ||= string_io do |io|
-          current_report.print_flamegraph(io)
+        ensure_file_generated(current_dump.flame_graph_path) do |file|
+          current_report.print_flamegraph(file)
         end
 
-        content_type :js
-        current_dump.flamegraph_json
+        send_file(current_dump.flame_graph_path, type: 'text/javascript')
       end
 
       get '/graph.png' do
-        current_dump.graph_data ||= string_io do |io|
-          current_report.print_graphviz({}, io)
+        ensure_file_generated(current_dump.graph_path) do |file|
+          current_report.print_graphviz({}, file)
         end
 
-        image_path = "/tmp/graph.png"
-
-        unless File.exist?(image_path)
-          GraphViz.parse_string(current_dump.graph_data).output(png: image_path)
+        ensure_file_generated(current_dump.graph_image_path) do |file|
+          GraphViz
+            .parse(current_dump.graph_path)
+            .output(png: current_dump.graph_image_path)
         end
 
-        content_type :png
-        File.read(image_path)
+        send_file(current_dump.graph_image_path, type: 'image/png')
       end
 
       get '/graph' do
@@ -108,7 +88,7 @@ module StackProf
       end
 
       get '/flamegraph' do
-        haml :flamegraph, layout: false
+        haml :flamegraph
       end
 
       get '/method' do
@@ -118,9 +98,8 @@ module StackProf
       end
 
       get '/file' do
-        path = params[:path]
-        @path = path
-        @data = presenter.file_overview(path)
+        @path = params[:path]
+        @data = presenter.file_overview(@path) if File.exist?(@path)
         haml :file
       end
     end

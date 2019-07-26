@@ -1,12 +1,15 @@
 %h3 StackProf Navigator - #{@action} (#{@frames.count} frames)
 %hr
 
-%a{:href => '/'} &#8592; Back to overview
-%br
+%p
+  %a{:href => url_for("/overview")} &#8592; Back to overview
 
 - @frames.each do |frame|
-  %h4
-    %a{:href => file_url(frame[:location])}= frame[:location]
+  %a{:href => url_for("/file", path: frame[:location])}
+    %button.btn
+      Browse
+      = frame[:location]
+
   - if frame[:callers].any?
     %table
       %thead
@@ -21,7 +24,7 @@
             %td= caller[:weight]
             %td= caller[:pct]
             %td
-              %a{:href => method_url(caller[:method])}
+              %a{:href => url_for("/method", name: caller[:method])}
                 = caller[:method]
 
   - if frame[:callees].any?
@@ -38,7 +41,7 @@
             %td= caller[:weight]
             %td= caller[:pct]
             %td
-              %a{:href => method_url(caller[:method])}
+              %a{:href => url_for("/method", name: caller[:method])}
                 = caller[:method]
 
   %h4 Code
