@@ -18,19 +18,27 @@ module StackProf
         register Sinatra::Reloader
       end
 
+      before do
+        unless request.path_info == '/'
+          if params[:dump] != current_dump.path
+            current_dump.path = params[:dump]
+          end
+        end
+      end
+
       helpers do
         def current_dump
           Thread.current[:dump] ||= Dump.new(params[:dump])
         end
 
         def current_report
-          Thread.current[:report] ||= StackProf::Report.new(
+          StackProf::Report.new(
             Marshal.load(current_dump.content)
           )
         end
 
         def presenter
-          Thread.current[:presenter] ||= Presenter.new(current_report)
+          Presenter.new(current_report)
         end
 
         def ensure_file_generated(path, &block)

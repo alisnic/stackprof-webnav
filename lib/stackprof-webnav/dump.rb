@@ -13,6 +13,20 @@ class Dump
     @content ||= File.open(@path).read
   end
 
+  def path=(new_path)
+    @path = new_path
+    check_checksum!
+  end
+
+  def check_checksum!
+    return unless @checksum
+
+    if Digest::SHA1.file(@path) != checksum
+      puts "\n\nFile reloaded"
+      @checksum, @content = nil, nil
+    end
+  end
+
   def flame_graph_path
     @path + ".#{checksum}.flames.json"
   end
