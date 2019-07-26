@@ -13,4 +13,4 @@
     - @files.each do |file|
       %tr
         %td
-          %a{href: "/overview?dump=#{URI.escape(file.path)}"}= file.name
+          %a{href: url_for("/overview", dump: file.path)}= file.name

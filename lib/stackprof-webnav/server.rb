@@ -4,6 +4,24 @@ require "stackprof"
 require 'net/http'
 require_relative 'presenter'
 require 'pry'
+require "sinatra/reloader" if development?
+require 'ruby-graphviz'
+
+class Dump
+  attr_reader :path
+  attr_accessor :flamegraph_json, :graph_data
+  def initialize(path)
+    @path = path
+  end
+
+  def checksum
+    @checksum ||= Digest::SHA1.file(@path)
+  end
+
+  def content
+    @content ||= File.open(@path).read
+  end
+end
 
 module StackProf
   module Webnav
@@ -12,33 +30,35 @@ module StackProf
         attr_accessor :cmd_options
       end
 
+      configure :development do
+        register Sinatra::Reloader
+      end
+
       helpers do
         def current_dump
-          File.open(params[:dump]).read
+          Thread.current[:dump] ||= Dump.new(params[:dump])
         end
 
         def current_report
-          StackProf::Report.new(Marshal.load(current_dump))
+          Thread.current[:report] ||= StackProf::Report.new(
+            Marshal.load(current_dump.content)
+          )
         end
 
         def presenter
           Thread.current[:presenter] ||= Presenter.new(current_report)
         end
 
-        def flamegraph_url
-          "/flamegraph?dump=#{URI.escape(params[:dump])}"
+        def string_io(&block)
+          io = StringIO.new
+          yield io
+          io.close
+          io.string
         end
 
-        def method_url name
-          "/method?dump=#{URI.escape(params[:dump])}&name=#{URI.escape(name)}"
-        end
-
-        def file_url path
-          "/file?dump=#{URI.escape(params[:dump])}&path=#{URI.escape(path)}"
-        end
-
-        def overview_url path
-          "/overview?dump=#{URI.escape(path)}"
+        def url_for(path, options={})
+          query = URI.encode_www_form({dump: params[:dump]}.merge(options))
+          path + "?" + query
         end
       end
 
@@ -54,33 +74,40 @@ module StackProf
       end
 
       get '/overview' do
-        @file = params[:dump]
         @action = "overview"
         @frames = presenter.overview_frames
         haml :overview
       end
 
       get '/flames.json' do
-        checksum = Digest::SHA1.file(params[:dump])
-        flames   = "/tmp/flames-#{checksum}.json"
-
-        unless File.exist?(flames)
-          puts "GENERATING FLAMES BOI"
-          f = File.open(flames, 'wb')
-          current_report.print_flamegraph(f)
-          f.close
+        current_dump.flamegraph_json ||= string_io do |io|
+          current_report.print_flamegraph(io)
         end
 
         content_type :js
-        File.read(flames)
+        current_dump.flamegraph_json
+      end
+
+      get '/graph.png' do
+        current_dump.graph_data ||= string_io do |io|
+          current_report.print_graphviz({}, io)
+        end
+
+        image_path = "/tmp/graph.png"
+
+        unless File.exist?(image_path)
+          GraphViz.parse_string(current_dump.graph_data).output(png: image_path)
+        end
+
+        content_type :png
+        File.read(image_path)
+      end
+
+      get '/graph' do
+        haml :graph
       end
 
       get '/flamegraph' do
-        checksum = Digest::SHA1.file(params[:dump])
-        flames   = "/tmp/flames-#{checksum}.json"
-
-        @json_path = flames
-
         haml :flamegraph, layout: false
       end
 

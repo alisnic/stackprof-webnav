@@ -3,11 +3,17 @@
 
 %p
   Viewing dump
-  %b= @file
+  %b= current_dump.path
+
+%a{href: "/"}
+  %button.btn Browse directory
 
 - if current_report.data[:raw]
-  %a{href: flamegraph_url}
+  %a{href: url_for("/flamegraph")}
     %button.btn View flamegraph
+
+%a{href: url_for("/graph")}
+  %button.btn View graph
 
 %table.centered
   %thead
@@ -25,5 +31,5 @@
         %td= frame[:samples]
         %td= frame[:samples_pct]
         %td
-          %a{:href => method_url(frame[:method])}
+          %a{:href => url_for("/method", name: frame[:method])}
             = frame[:method]
