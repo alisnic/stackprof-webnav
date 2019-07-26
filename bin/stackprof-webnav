@@ -12,11 +12,12 @@ parser = OptionParser.new(ARGV) do |o|
   o.on('-f [LOCALFILE]', 'Local file path to dump') {|filepath| options[:filepath] = filepath }
   o.on('-u [URI]', 'URI path to dump') {|uri| options[:uri] = uri }
   o.on('-b [URI]', 'URI path to Amazon S3 bucket listing') {|bucket| options[:bucket] = bucket}
+  o.on('-d [DIRECTORY]', 'path to a directory with dumps') {|directory| options[:directory] = directory}
   o.on('-p [PORT]', 'Server port') {|port| options[:port] = port }
 end
 
 parser.parse!
-parser.abort(parser.help) unless [:filepath, :uri, :bucket].any? {|key| options.key?(key)}
+# parser.abort(parser.help) unless [:filepath, :uri, :bucket].any? {|key| options.key?(key)}
 
 server = StackProf::Webnav::Server
 server.cmd_options = options

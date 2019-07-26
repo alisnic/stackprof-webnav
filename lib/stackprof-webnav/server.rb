@@ -3,83 +3,85 @@ require 'haml'
 require "stackprof"
 require 'net/http'
 require_relative 'presenter'
+require 'pry'
 
 module StackProf
   module Webnav
     class Server < Sinatra::Application
       class << self
-        attr_accessor :cmd_options, :report_dump_path, :report_dump_uri, :report_dump_listing
-
-        def presenter regenerate=false
-          return @presenter unless regenerate || @presenter.nil?
-          process_options
-          if self.report_dump_path || self.report_dump_uri
-            report_contents = if report_dump_path.nil?
-                                Net::HTTP.get(URI.parse(report_dump_uri))
-                              else
-                                File.open(report_dump_path).read
-                              end
-            report = StackProf::Report.new(Marshal.load(report_contents))
-          end
-          @presenter = Presenter.new(report)
-        end
-
-        private
-        def process_options
-          if cmd_options[:filepath]
-            self.report_dump_path = cmd_options[:filepath]
-          elsif cmd_options[:uri]
-            self.report_dump_uri = cmd_options[:uri]
-          elsif cmd_options[:bucket]
-            self.report_dump_listing = cmd_options[:bucket]
-          end
-        end
-
+        attr_accessor :cmd_options
       end
 
       helpers do
+        def current_dump
+          File.open(params[:dump]).read
+        end
+
+        def current_report
+          StackProf::Report.new(Marshal.load(current_dump))
+        end
+
         def presenter
-          Server.presenter
+          Thread.current[:presenter] ||= Presenter.new(current_report)
+        end
+
+        def flamegraph_url
+          "/flamegraph?dump=#{URI.escape(params[:dump])}"
         end
 
         def method_url name
-          "/method?name=#{URI.escape(name)}"
+          "/method?dump=#{URI.escape(params[:dump])}&name=#{URI.escape(name)}"
         end
 
         def file_url path
-          "/file?path=#{URI.escape(path)}"
+          "/file?dump=#{URI.escape(params[:dump])}&path=#{URI.escape(path)}"
         end
 
         def overview_url path
-          "/overview?path=#{URI.escape(path)}"
+          "/overview?dump=#{URI.escape(path)}"
         end
       end
 
       get '/' do
-        presenter
-        if Server.report_dump_listing
-          redirect '/listing'
-        else
-          redirect '/overview'
+        @directory = File.expand_path(Server.cmd_options[:directory] || '.')
+        @files = Dir.entries(@directory).map do |file|
+          OpenStruct.new(name: file, path: File.expand_path(file, @directory))
+        end.select do |file|
+          File.file?(file.path)
         end
+
+        haml :index
       end
 
       get '/overview' do
-        if params[:path]
-          Server.report_dump_uri = params[:path]
-          Server.presenter(true)
-        end
-        @file = Server.report_dump_path || Server.report_dump_uri
+        @file = params[:dump]
         @action = "overview"
         @frames = presenter.overview_frames
         haml :overview
       end
 
-      get '/listing' do
-        @file = Server.report_dump_listing
-        @action = "listing"
-        @dumps = presenter.listing_dumps
-        haml :listing
+      get '/flames.json' do
+        checksum = Digest::SHA1.file(params[:dump])
+        flames   = "/tmp/flames-#{checksum}.json"
+
+        unless File.exist?(flames)
+          puts "GENERATING FLAMES BOI"
+          f = File.open(flames, 'wb')
+          current_report.print_flamegraph(f)
+          f.close
+        end
+
+        content_type :js
+        File.read(flames)
+      end
+
+      get '/flamegraph' do
+        checksum = Digest::SHA1.file(params[:dump])
+        flames   = "/tmp/flames-#{checksum}.json"
+
+        @json_path = flames
+
+        haml :flamegraph, layout: false
       end
 
       get '/method' do

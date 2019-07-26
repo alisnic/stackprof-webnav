@@ -1,0 +1,16 @@
+%h3 StackProf Navigator
+%hr
+
+%p
+  Listing dumps in
+  %b= @directory
+
+%table.centered
+  %thead
+    %th Filename
+
+  %tbody
+    - @files.each do |file|
+      %tr
+        %td
+          %a{href: "/overview?dump=#{URI.escape(file.path)}"}= file.name

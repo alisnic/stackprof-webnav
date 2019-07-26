@@ -5,6 +5,10 @@
   Viewing dump
   %b= @file
 
+- if current_report.data[:raw]
+  %a{href: flamegraph_url}
+    %button.btn View flamegraph
+
 %table.centered
   %thead
     %th Total

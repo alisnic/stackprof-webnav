@@ -1,0 +1,77 @@
+%a{:href => overview_url(params[:dump])}
+  %button Back to overview
+
+%br
+%br
+
+:css
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 10pt;
+  }
+  .overview-container {
+    position: relative;
+  }
+  .overview {
+    cursor: col-resize;
+  }
+  .overview-viewport-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1;
+    height: 1;
+    background-color: rgba(0, 0, 0, 0.25);
+    transform-origin: top left;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: grab;
+  }
+  .moving {
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+    cursor: grabbing;
+  }
+  .info {
+    display: block;
+    height: 40px;
+    margin: 3px 6px;
+    margin-right: 206px;
+    padding: 3px 6px;
+    line-height: 18px;
+  }
+  .legend {
+    display: block;
+    float: right;
+    width: 195px;
+    max-height: 100%;
+    overflow-y: scroll;
+  }
+  .legend > div {
+    padding: 6px;
+    clear: right;
+  }
+  .legend > div span {
+    opacity: 0.75;
+    display: block;
+    text-align: right;
+  }
+  .legend > div .name {
+    max-width: 70%;
+    word-wrap: break-word;
+  }
+%script{:src => "flamegraph.js"}
+.legend
+.overview-container
+  %canvas.overview
+  .overview-viewport-overlay
+.info
+  %div{:style => "float: right; text-align: right"}
+    .samples
+    .exclusive
+  .frame
+  .file
+%canvas.flamegraph
+%script{:src => "/flames.json?dump=#{params[:dump]}"}
