@@ -18,6 +18,15 @@ module StackProf
         register Sinatra::Reloader
       end
 
+      configure :production do
+        set :show_exceptions, false
+      end
+
+      error do
+        @error = env['sinatra.error']
+        haml :error
+      end
+
       before do
         unless request.path_info == '/'
           if params[:dump] != current_dump.path
@@ -28,7 +37,8 @@ module StackProf
 
       helpers do
         def current_dump
-          Thread.current[:dump] ||= Dump.new(params[:dump])
+          Thread.current[:cache] = {}
+          Thread.current[params[:dump]] ||= Dump.new(params[:dump])
         end
 
         def current_report
