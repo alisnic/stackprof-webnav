@@ -3,7 +3,7 @@ PATH
   specs:
     stackprof-webnav (0.1.0)
       better_errors (~> 1.1.0)
-      haml (~> 4.0)
+      haml (>= 4, < 6)
       sinatra (~> 2.0.1)
       stackprof (~> 0.2)
 
@@ -15,20 +15,22 @@ GEM
       erubis (>= 2.6.6)
     coderay (1.1.2)
     erubis (2.7.0)
-    haml (4.0.7)
+    haml (5.1.2)
+      temple (>= 0.8.0)
       tilt
-    mustermann (1.0.2)
-    rack (2.0.4)
-    rack-protection (2.0.1)
+    mustermann (1.0.3)
+    rack (2.0.7)
+    rack-protection (2.0.7)
       rack
     rake (10.3.2)
-    sinatra (2.0.1)
+    sinatra (2.0.7)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.1)
+      rack-protection (= 2.0.7)
       tilt (~> 2.0)
-    stackprof (0.2.11)
-    tilt (2.0.8)
+    stackprof (0.2.13)
+    temple (0.8.2)
+    tilt (2.0.10)
 
 PLATFORMS
   ruby
