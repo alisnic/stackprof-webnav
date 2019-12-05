@@ -1,16 +1,16 @@
 # StackProf Web navigator
 
-__WARNING__: early version, no tests, may have bugs.
-
 Provides a web ui to inspect stackprof dumps.
 
 ## Screenshots
 
-![main screenshot][main-screenshot]
+![][https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/directory.png?raw=true]
 
-![method screenshot][method-screenshot]
+![][https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/overview.png?raw=true]
 
-![file screenshot][file-screenshot]
+![][https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/callgraph.png?raw=true]
+
+![][https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/flamegraph.png?raw=true]
 
 ## Usage
 
@@ -19,22 +19,31 @@ Provides a web ui to inspect stackprof dumps.
 $ gem install stackprof-webnav
 ```
 
-### Pass a dump/URI to it
+### Run the server
+
+```bash
+$ stackprof-webnav
+```
+
+By default it will list all files in the current directory. You can click in the
+web interface to try to open any file as a dump.
+
+Additionally, you can list another directory by passing the `-d` flag:
+
+```bash
+$ stackprof-webnav -d /my/folder/with/dumps
+```
+
+Or launch it with a dump preselected:
+
 ```bash
 $ stackprof-webnav -f /path/to/stackprof.dump
-$ stackprof-webnav -u http://path/to/stackprof.dump
-$ stackprof-webnav -b http://amazon/s3/bucketlisting.xml
 ```
 
 See [stackprof gem][create-dump] homepage to learn how to create dumps.
-See [amazon s3 API docs][list-bucket-contents] to see the URI format for S3 bucket listings.
 
 ### Profit
-Open the browser at localhost:9292. If you've used the -f or -u form, you can navigate the dump. If you've used the -b form, you'll see a listing of the keys in the bucket -- click on one that is a dump to browse through it.
-
-## Caveats
-- no tests, this gem was created for my personal usage in a hack stream,
-  bugs may occur
+Open the browser at localhost:9292
 
 ## Contributing
 
@@ -45,7 +54,3 @@ Open the browser at localhost:9292. If you've used the -f or -u form, you can na
 5. Create new Pull Request
 
 [create-dump]: https://github.com/tmm1/stackprof#getting-started
-[main-screenshot]: https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/main.png?raw=true
-[method-screenshot]: https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/method.png?raw=true
-[file-screenshot]: https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/file.png?raw=true
-[list-bucket-contents]: http://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGET.html

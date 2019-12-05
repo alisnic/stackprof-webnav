@@ -3,7 +3,21 @@
 
 %p
   Viewing dump
-  %b= @file
+  %b= current_dump.path
+
+%a{href: "/"}
+  %button.btn Browse directory
+
+
+%a{href: url_for("/graph")}
+  %button.btn View call graph
+
+- if current_report.data[:raw]
+  %a{href: url_for("/flamegraph")}
+    %button View flamegraph
+- else
+  %a{href: "https://github.com/tmm1/stackprof#all-options"}
+    %button.secondary Flamegraph is not available
 
 %table.centered
   %thead
@@ -21,5 +35,5 @@
         %td= frame[:samples]
         %td= frame[:samples_pct]
         %td
-          %a{:href => method_url(frame[:method])}
+          %a{:href => url_for("/method", name: frame[:method])}
             = frame[:method]

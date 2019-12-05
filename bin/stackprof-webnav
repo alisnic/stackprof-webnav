@@ -8,17 +8,15 @@ options = {
 }
 
 parser = OptionParser.new(ARGV) do |o|
-  o.banner = "Usage: stackprof-webnav [-f localfile.dump]|[-u http://path/to/file.dump]|[-b http://path/to/s3/bucket/listing] [-p NUMBER]"
+  o.banner = "Usage: stackprof-webnav [-f localfile.dump]|[-d directory]|[-p NUMBER]"
   o.on('-f [LOCALFILE]', 'Local file path to dump') {|filepath| options[:filepath] = filepath }
-  o.on('-u [URI]', 'URI path to dump') {|uri| options[:uri] = uri }
-  o.on('-b [URI]', 'URI path to Amazon S3 bucket listing') {|bucket| options[:bucket] = bucket}
+  o.on('-d [DIRECTORY]', 'path to a directory with dumps') {|directory| options[:directory] = directory}
   o.on('-p [PORT]', 'Server port') {|port| options[:port] = port }
 end
 
 parser.parse!
-parser.abort(parser.help) unless [:filepath, :uri, :bucket].any? {|key| options.key?(key)}
 
 server = StackProf::Webnav::Server
 server.cmd_options = options
 
-Rack::Handler.get('webrick').run server.new, :Port => options[:port]
+Rack::Handler.pick(['thin', 'webrick']).run server.new, :Port => options[:port]
