@@ -6,6 +6,10 @@ Provides a web ui to inspect stackprof dumps.
 
 ![](https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/directory.png?raw=true)
 
+![](https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/method.png?raw=true)
+
+![](https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/file.png?raw=true)
+
 ![](https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/overview.png?raw=true)
 
 ![](https://github.com/alisnic/stackprof-webnav/blob/master/screenshots/callgraph.png?raw=true)
