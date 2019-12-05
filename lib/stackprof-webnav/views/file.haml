@@ -5,7 +5,10 @@
 %br
 %br
 
-.code_linenums
-  - @data[:lineinfo].each do |l|
-    %span= l
-!= @data[:code]
+- if @data
+  .code_linenums
+    - @data[:lineinfo].each do |l|
+      %span= l
+  != @data[:code]
+- else
+  %h3 Unable to load file, was the dump captured on another machine?

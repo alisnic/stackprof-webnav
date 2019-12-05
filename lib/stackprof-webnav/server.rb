@@ -90,8 +90,14 @@ module StackProf
 
       get '/file' do
         path = params[:path]
-        @path = path
-        @data = presenter.file_overview(path)
+
+        if File.exist?(path)
+          @path = path
+          @data = presenter.file_overview(path)
+        else
+          @data = nil
+        end
+
         haml :file
       end
     end
