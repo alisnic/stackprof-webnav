@@ -122,8 +122,15 @@ module StackProf
       end
 
       get '/file' do
-        @path = params[:path]
-        @data = presenter.file_overview(@path) if File.exist?(@path)
+        path = params[:path]
+
+        if File.exist?(path)
+          @path = path
+          @data = presenter.file_overview(path)
+        else
+          @data = nil
+        end
+
         haml :file
       end
     end
