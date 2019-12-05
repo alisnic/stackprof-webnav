@@ -8,12 +8,16 @@
 %a{href: "/"}
   %button.btn Browse directory
 
-- if current_report.data[:raw]
-  %a{href: url_for("/flamegraph")}
-    %button.btn View flamegraph
 
 %a{href: url_for("/graph")}
-  %button.btn View graph
+  %button.btn View call graph
+
+- if current_report.data[:raw]
+  %a{href: url_for("/flamegraph")}
+    %button View flamegraph
+- else
+  %a{href: "https://github.com/tmm1/stackprof#all-options"}
+    %button.secondary Flamegraph is not available
 
 %table.centered
   %thead

@@ -1,13 +1,13 @@
 PATH
   remote: .
   specs:
-    stackprof-webnav (0.1.0)
+    stackprof-webnav (1.0.0)
       better_errors (~> 1.1.0)
       haml (~> 5.1.2)
       ruby-graphviz (~> 1.2.4)
       sinatra (~> 2.0.7)
       sinatra-contrib (~> 2.0.5)
-      stackprof (~> 0.2)
+      stackprof (>= 0.2.13)
 
 GEM
   remote: https://rubygems.org/

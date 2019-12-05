@@ -18,4 +18,8 @@ task :make_dump do
   StackProf.run(mode: :cpu, out: 'spec/fixtures/test.dump') do
     1000.times { DummyB.new.work }
   end
+
+  StackProf.run(mode: :cpu, raw: true, out: 'spec/fixtures/test-raw.dump') do
+    1000.times { DummyB.new.work }
+  end
 end

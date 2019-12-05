@@ -63,6 +63,11 @@ module StackProf
       end
 
       get '/' do
+        if Server.cmd_options[:filepath]
+          query = URI.encode_www_form(dump: Server.cmd_options[:filepath])
+          next redirect to("/overview?#{query}")
+        end
+
         @directory = File.expand_path(Server.cmd_options[:directory] || '.')
         @files = Dir.entries(@directory).sort.map do |file|
           path = File.expand_path(file, @directory)
@@ -81,13 +86,18 @@ module StackProf
 
       get '/overview' do
         @action = "overview"
-        @frames = presenter.overview_frames
-        haml :overview
+
+        begin
+          @frames = presenter.overview_frames
+          haml :overview
+        rescue => error
+          haml :invalid_dump
+        end
       end
 
       get '/flames.json' do
         ensure_file_generated(current_dump.flame_graph_path) do |file|
-          current_report.print_flamegraph(file)
+          current_report.print_flamegraph(file, true, true)
         end
 
         send_file(current_dump.flame_graph_path, type: 'text/javascript')
