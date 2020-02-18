@@ -25,7 +25,7 @@
             %td= caller[:pct]
             %td
               %a{:href => url_for("/method", name: caller[:method])}
-                = caller[:method]
+                &= caller[:method]
 
   - if frame[:callees].any?
     %table
@@ -42,7 +42,7 @@
             %td= caller[:pct]
             %td
               %a{:href => url_for("/method", name: caller[:method])}
-                = caller[:method]
+                &= caller[:method]
 
   %h4 Code
   != frame[:source]
