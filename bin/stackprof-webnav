@@ -4,13 +4,15 @@ require 'stackprof-webnav'
 require 'rack'
 
 options = {
+  :addr => 127.0.0.1,
   :port => 9292
 }
 
 parser = OptionParser.new(ARGV) do |o|
-  o.banner = "Usage: stackprof-webnav [-f localfile.dump]|[-d directory]|[-p NUMBER]"
+  o.banner = "Usage: stackprof-webnav [-f localfile.dump]|[-d directory]|[-o ADDR]|[-p NUMBER]"
   o.on('-f [LOCALFILE]', 'Local file path to dump') {|filepath| options[:filepath] = filepath }
   o.on('-d [DIRECTORY]', 'path to a directory with dumps') {|directory| options[:directory] = directory}
+  o.on('-o [ADDR]', 'Server addr bind') {|addr| options[:addr] = addr }
   o.on('-p [PORT]', 'Server port') {|port| options[:port] = port }
 end
 
@@ -19,4 +21,4 @@ parser.parse!
 server = StackProf::Webnav::Server
 server.cmd_options = options
 
-Rack::Handler.pick(['thin', 'webrick']).run server.new, :Port => options[:port]
+Rack::Handler.pick(['thin', 'webrick']).run server.new, :Host => options[:addr], :Port => options[:port]
