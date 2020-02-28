@@ -33,7 +33,7 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
-    rake (10.5.0)
+    rake (13.0.1)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -71,7 +71,7 @@ DEPENDENCIES
   bundler (~> 1.5)
   pry
   rack-test (~> 1.1.0)
-  rake (~> 10.1)
+  rake (~> 13.0)
   rspec (~> 3.9.0)
   stackprof-webnav!
 
