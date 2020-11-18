@@ -29,7 +29,7 @@ module StackProf
 
       before do
         unless request.path_info == '/'
-          if params[:dump] != current_dump.path
+          if params[:dump] && params[:dump] != current_dump.path
             current_dump.path = params[:dump]
           end
         end
