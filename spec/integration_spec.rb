@@ -26,6 +26,11 @@ RSpec.describe "integration tests" do
     end
   end
 
+  it "does not crash on unknown requests" do
+    app.get "/favicon.ico"
+    expect(response.status).to eq(404)
+  end
+
   describe "overview" do
     it "works with a valid dump" do
       app.get "/overview", dump: fixture_path("test.dump")
