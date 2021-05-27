@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    stackprof-webnav (1.0.1)
+    stackprof-webnav (1.0.2)
       better_errors (~> 1.1.0)
       haml (~> 5.1.2)
       ruby-graphviz (~> 1.2.4)
@@ -12,7 +12,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    backports (3.15.0)
+    backports (3.21.0)
     better_errors (1.1.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -30,11 +30,12 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     rack (2.0.8)
-    rack-protection (2.0.7)
+    rack-protection (2.0.8.1)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rake (10.5.0)
+    rexml (3.2.5)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -48,21 +49,22 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.0)
-    ruby-graphviz (1.2.4)
-    ruby2_keywords (0.0.2)
-    sinatra (2.0.7)
+    ruby-graphviz (1.2.5)
+      rexml
+    ruby2_keywords (0.0.4)
+    sinatra (2.0.8.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.7)
+      rack-protection (= 2.0.8.1)
       tilt (~> 2.0)
-    sinatra-contrib (2.0.7)
+    sinatra-contrib (2.0.8.1)
       backports (>= 2.8.2)
       multi_json
       mustermann (~> 1.0)
-      rack-protection (= 2.0.7)
-      sinatra (= 2.0.7)
+      rack-protection (= 2.0.8.1)
+      sinatra (= 2.0.8.1)
       tilt (~> 2.0)
-    stackprof (0.2.13)
+    stackprof (0.2.17)
     temple (0.8.2)
     tilt (2.0.10)
 
@@ -70,7 +72,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.5)
+  bundler (~> 2.2)
   pry
   rack-test (~> 1.1.0)
   rake (~> 10.1)
