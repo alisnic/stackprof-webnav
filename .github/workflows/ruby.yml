@@ -32,6 +32,6 @@ jobs:
         ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Install graphviz
-      run: sudo apt-get install graphviz
+      run: sudo apt-get install -y graphviz
     - name: Run tests
       run: bundle exec rspec
