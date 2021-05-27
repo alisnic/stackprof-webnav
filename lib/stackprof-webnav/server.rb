@@ -1,10 +1,10 @@
 require 'sinatra'
 require 'haml'
-require "stackprof"
+require 'stackprof'
 require_relative 'presenter'
 require_relative 'dump'
 require 'pry'
-require "sinatra/reloader" if development?
+require 'sinatra/reloader' if development?
 require 'ruby-graphviz'
 
 module StackProf
@@ -103,7 +103,7 @@ module StackProf
         send_file(current_dump.flame_graph_path, type: 'text/javascript')
       end
 
-      get '/graph.png' do
+      get '/graph.svg' do
         ensure_file_generated(current_dump.graph_path) do |file|
           current_report.print_graphviz({}, file)
         end
@@ -111,10 +111,10 @@ module StackProf
         ensure_file_generated(current_dump.graph_image_path) do |file|
           GraphViz
             .parse(current_dump.graph_path)
-            .output(png: current_dump.graph_image_path)
+            .output(svg: current_dump.graph_image_path)
         end
 
-        send_file(current_dump.graph_image_path, type: 'image/png')
+        send_file(current_dump.graph_image_path, type: 'image/svg+xml')
       end
 
       get '/graph' do

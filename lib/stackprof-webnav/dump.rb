@@ -36,6 +36,6 @@ class Dump
   end
 
   def graph_image_path
-    @path + ".#{checksum}.graph.png"
+    @path + ".#{checksum}.graph.svg"
   end
 end
