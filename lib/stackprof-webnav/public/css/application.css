@@ -5,3 +5,14 @@ table {
 pre code {
   color: black;
 }
+
+#graph > a {
+  position: absolute;
+}
+#graph > div {
+  overflow: scroll;
+  height: 100%;
+}
+#graph > div > img {
+  max-width: initial;
+}

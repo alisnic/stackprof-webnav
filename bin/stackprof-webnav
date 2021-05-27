@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 require 'optparse'
-require 'stackprof-webnav'
 require 'rack'
+
+require_relative '../lib/stackprof-webnav'
 
 options = {
   :addr => "127.0.0.1",

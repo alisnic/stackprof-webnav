@@ -8,7 +8,7 @@ RSpec.describe "integration tests" do
   after(:each) do
     Dir.glob("spec/fixtures/*.flames.json").each {|file| File.delete(file) }
     Dir.glob("spec/fixtures/*.digraph.dot").each {|file| File.delete(file) }
-    Dir.glob("spec/fixtures/*.graph.png").each {|file| File.delete(file) }
+    Dir.glob("spec/fixtures/*.graph.svg").each {|file| File.delete(file) }
   end
 
   describe "index" do
@@ -55,8 +55,8 @@ RSpec.describe "integration tests" do
   end
 
   it "is able to render graph" do
-    app.get "/graph.png", dump: fixture_path("test.dump")
-    expect(response.get_header("Content-Type")).to eq("image/png")
+    app.get "/graph.svg", dump: fixture_path("test.dump")
+    expect(response.get_header("Content-Type")).to eq("image/svg+xml")
     expect(response.body.size).to_not eq(0)
   end
 

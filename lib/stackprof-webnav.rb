@@ -1,1 +1,1 @@
-require 'stackprof-webnav/server'
+require_relative 'stackprof-webnav/server'
