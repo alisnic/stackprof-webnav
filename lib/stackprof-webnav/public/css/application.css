@@ -6,6 +6,12 @@ pre code {
   color: black;
 }
 
+input.filter {
+  max-width: 68%;
+  margin: 0 0 0 1rem;
+  display: inline;
+}
+
 #graph > a {
   position: absolute;
 }

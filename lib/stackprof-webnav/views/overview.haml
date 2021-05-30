@@ -25,11 +25,14 @@
     %th %
     %th Samples
     %th %
-    %th Method
+    %th
+      Method
+      %input.filter{:placeholder => "filter methods", :type => "text"}/
 
   %tbody
     - @frames.each do |frame|
-      %tr
+      - # Filter keys are preprocessed to better match acronyms.
+      %tr{"data-filter-key" => frame[:method].gsub(/[A-Z]/, " \\0").gsub(/[\W_]+/, " ").strip}
         %td= frame[:total]
         %td= frame[:total_pct]
         %td= frame[:samples]
@@ -37,3 +40,6 @@
         %td
           %a{:href => url_for("/method", name: frame[:method])}
             &= frame[:method]
+
+%script{src: "lib/string_score.js"}
+%script{src: "overview.js"}
