@@ -3,7 +3,6 @@ require 'haml'
 require 'stackprof'
 require_relative 'presenter'
 require_relative 'dump'
-require 'pry'
 require 'sinatra/reloader' if development?
 require 'ruby-graphviz'
 
