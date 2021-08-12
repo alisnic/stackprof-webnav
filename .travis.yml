@@ -1,4 +1,0 @@
-language: ruby
-script: bundle exec rspec
-before_install:
-  - "sudo apt-get install graphviz"
