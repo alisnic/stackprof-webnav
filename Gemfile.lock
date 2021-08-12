@@ -8,6 +8,7 @@ PATH
       sinatra (~> 2.0.7)
       sinatra-contrib (~> 2.0.5)
       stackprof (>= 0.2.13)
+      webrick (~> 1.7.0)
 
 GEM
   remote: https://rubygems.org/
@@ -67,6 +68,7 @@ GEM
     stackprof (0.2.17)
     temple (0.8.2)
     tilt (2.0.10)
+    webrick (1.7.0)
 
 PLATFORMS
   ruby
