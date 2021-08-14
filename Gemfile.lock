@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    stackprof-webnav (1.0.2)
+    stackprof-webnav (1.0.3)
       better_errors (~> 1.1.0)
       haml (~> 5.1.2)
       ruby-graphviz (~> 1.2.4)
@@ -51,7 +51,7 @@ GEM
     rspec-support (3.9.0)
     ruby-graphviz (1.2.5)
       rexml
-    ruby2_keywords (0.0.4)
+    ruby2_keywords (0.0.5)
     sinatra (2.1.0)
       mustermann (~> 1.0)
       rack (~> 2.2)
