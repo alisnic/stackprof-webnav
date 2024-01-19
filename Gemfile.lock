@@ -4,11 +4,12 @@ PATH
     stackprof-webnav (1.0.3)
       better_errors (~> 1.1.0)
       haml (~> 5.1.2)
+      rackup (>= 1.0.0, < 3.0.0)
       ruby-graphviz (~> 1.2.4)
-      sinatra (~> 2.1.0)
-      sinatra-contrib (~> 2.1.0)
+      sinatra (>= 2.1.0, < 5.0.0)
+      sinatra-contrib (>= 2.1.0, < 5.0.0)
       stackprof (>= 0.2.13)
-      webrick (~> 1.7.0)
+      webrick (~> 1.7)
 
 GEM
   remote: https://rubygems.org/
@@ -34,6 +35,9 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
+    rackup (1.0.0)
+      rack (< 3)
+      webrick
     rake (10.5.0)
     rexml (3.2.5)
     rspec (3.9.0)
@@ -74,7 +78,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 2.2)
   pry
-  rack-test (~> 1.1.0)
+  rack-test (>= 1.1.0, < 3.0.0)
   rake (~> 10.1)
   rspec (~> 3.9.0)
   stackprof-webnav!
